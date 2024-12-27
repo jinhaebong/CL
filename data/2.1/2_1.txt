@@ -1,0 +1,6 @@
+=== Evaluation Result ===
+Total samples: 14042
+Correctness (Known):  9812
+Confidence (Known):   9812
+Certainty (Known):    7751
+Saved result => data/2.1/evaluated_MMLU.json
