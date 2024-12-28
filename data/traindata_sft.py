@@ -15,8 +15,11 @@ formatted_data = {"type": "text_only", "instances": []}
 # 遍历推理完成的数据
 for subject, questions in inferred_data.items():
     for question in questions:
+
+        
         # 构建基础问题格式
-        full_input = f"The following are multiple choice questions (with answers) about {subject}.\n\n"
+        full_input = f"The following are multiple choice questions (with answers) about {subject}.\n"
+        full_input += "If you are not sure about the answer, respond with N.\n\n"
         full_input += f"Question: {question['question']}\n"
         full_input += "Choices: " + " ".join([f"{chr(65+i)}. {choice}" for i, choice in enumerate(question['choices'])]) + "\n"
 
