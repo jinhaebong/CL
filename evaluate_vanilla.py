@@ -12,9 +12,6 @@ from transformers import AutoTokenizer, AutoModelForCausalLM
 
 logging.getLogger("transformers").setLevel(logging.ERROR)
 
-STOP = []
-SURE = []
-UNSURE = []
 choices = ["A", "B", "C", "D"]
 
 def gen_prompt(sample, subject, prompt_data):
@@ -80,30 +77,11 @@ def inference(tokenizer, model, sample, subject, prompt_data, device):
 
     return pred_choice, probs_4, full_input
 
-def checksure(input_text, model, tokenizer, device):
-
-    full_input = f"{input_text}. Are you sure you accurately answered the question based on your internal knowledge? I am"
-    inputs = tokenizer(full_input,return_tensors="pt").to(device)
-    ids = inputs['input_ids']
-    outputs = model.generate(
-                ids,
-                max_new_tokens = 1,
-                output_scores = True,
-                return_dict_in_generate=True
-            )
-    logits = outputs['scores']
-     #greedy decoding and calculate the confidence of sure and unsure
-    pt = torch.softmax(torch.Tensor(logits[0][0]),dim=0)
-    sure_prob = pt[SURE[0]]
-    unsure_prob = pt[UNSURE[0]]
-    sure_prob = sure_prob/(sure_prob+unsure_prob)   #normalization
-       
-    return sure_prob.item()
 
 
 def main():
     parser = ArgumentParser()
-    parser.add_argument('--model', type=str, default="output_models/Qwen2-7B-rtune/merge")
+    parser.add_argument('--model', type=str, default="output_models/Qwen2-7B-vanilla/merge")
     parser.add_argument('--domain', type=str, default="id",choices=["id","ood"])
     args = parser.parse_args()
     
@@ -116,9 +94,6 @@ def main():
     )
     model = AutoModelForCausalLM.from_pretrained(args.model).to(device)
     
-    STOP.append(tokenizer(".")['input_ids'][0])  # stop decoding when seeing '.'
-    SURE.append(tokenizer("sure")['input_ids'][0])
-    UNSURE.append(tokenizer("unsure")['input_ids'][0])
 
     with open(f"data/split_data/{args.domain}_test.json", 'r') as f:
         data = json.load(f)
@@ -140,7 +115,7 @@ def main():
             correct_answer = sample["answer"]
 
             # 1) 做推理
-            pred_choice, probs_4,full_input = inference(
+            pred_choice, probs_4,_ = inference(
                 tokenizer=tokenizer,
                 model=model,
                 sample=sample,
@@ -160,15 +135,14 @@ def main():
             ent = entropy(probs_4 + 1e-12)
 
             # 5) sure_prob
-            sure_prob= checksure(f"{full_input}{pred_choice}", model, tokenizer, device)
 
             
-            subject_data.append((correctness,float(answer_prob),float(ent),sure_prob))
+            subject_data.append((correctness,float(answer_prob),float(ent)))
         results[subject] = subject_data
     
 
     # 保存评估结果
-    save_dir = "result/2.2.1/rtune"
+    save_dir = "result/2.2.1/vanilla"
     save_file = f"result_{args.domain}.json"
     os.makedirs(save_dir, exist_ok=True)
     output_file = os.path.join(save_dir,save_file )
