@@ -138,6 +138,10 @@ def main():
             ent = entropy(probs_4 + 1e-12)
             certainty = "Known" if (ent < ENTROPY_THRESHOLD and correctness=="Known") else "Unknown"
 
+            #cor
+            answer_idx = {"A":0,"B":1,"C":2,"D":3}[correct_answer]
+            cor_prob = probs_4[answer_idx]
+
             # 统计计数
             if correctness == "Known":
                 correct_count += 1
@@ -164,7 +168,9 @@ def main():
                     "Certainty": {
                         "result": certainty,
                         "entropy": float(ent),
-                    }
+                    
+                    },
+                    "Cor":float(cor_prob)
                 }
             }
             subject_data.append(sample_eval)
