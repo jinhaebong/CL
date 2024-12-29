@@ -83,7 +83,7 @@ def main():
     args = parser.parse_args()
     
 
-    device = torch.device("cuda:4" if torch.cuda.is_available() else "cpu")
+    device = torch.device("cuda:2" if torch.cuda.is_available() else "cpu")
     tokenizer = AutoTokenizer.from_pretrained(
         args.model, use_fast=True,
         unk_token="<unk>", bos_token="<s>", eos_token="</s>", add_bos_token=False
@@ -131,8 +131,7 @@ def main():
             correctness = "Known" if (pred_choice == correct_answer) else "Unknown"
 
             # 3) Confidence
-            correct_idx = {"A":0,"B":1,"C":2,"D":3}[correct_answer]
-            answer_prob = probs_4[correct_idx]
+            answer_prob = np.max(probs_4)
             confidence = "Known" if (answer_prob > CONFIDENCE_THRESHOLD and correctness=="Known") else "Unknown"
 
             # 4) Certainty (基于熵, 熵越小越确定)
