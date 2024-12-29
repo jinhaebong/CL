@@ -1,7 +1,7 @@
 import os
 import json
 
-with open(f"result_id.json", 'r') as f:
+with open(f"../prompt/result_id.json", 'r') as f:
     data = json.load(f)
 
 correct = 0

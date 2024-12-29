@@ -2,9 +2,9 @@ import json
 import os
 import random
 
-input_file = "split_data/indomain_train.json"  
+input_file = "Qwen2-7B-Instruct/split_data/indomain_train.json"  
 prompt_file = "MMLU/dev.json"
-output_file = "traindata/sft/sft_indomain_train.json"  
+output_file = "Qwen2-7B-Instruct/traindata/sft/sft_indomain_train.json"  
 
 # 加载推理完成的数据
 with open(input_file, "r", encoding="utf-8") as f:
@@ -33,7 +33,7 @@ for subject, questions in inferred_data.items():
             
         full_input += "If you are not sure about the answer, respond with N.\n\n"
         full_input += f"Question: {question['question']}\n"
-        full_input += "Choices: " + " ".join([f"{chr(65+i)}. {choice}" for i, choice in enumerate(question['choices'])]) + "\n"
+        full_input += "Choices: " + " ".join([f"{chr(65+i)}. {choice}" for i, choice in enumerate(question['choices'])]) + " N. I don't know"+"\n"
 
         # 根据 kb 的值添加 sure/unsure
         if question["kb"] == "Known":

@@ -12,9 +12,6 @@ from transformers import AutoTokenizer, AutoModelForCausalLM
 
 logging.getLogger("transformers").setLevel(logging.ERROR)
 
-STOP = []
-SURE = []
-UNSURE = []
 choices = ["A", "B", "C", "D","N"]
 
 def gen_prompt(sample, subject, prompt_data):
@@ -22,7 +19,7 @@ def gen_prompt(sample, subject, prompt_data):
     sample: {
        "question": str,
        "choices": [str, str, str, str],
-       "answer": "A"/"B"/"C"/"D"/"N"
+       "answer": "A"/"B"/"C"/"D"
     }
     """
     # 1) 先处理“shots”的示例拼接

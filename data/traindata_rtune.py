@@ -2,9 +2,9 @@ import json
 import os
 import random
 
-input_file = "split_data/indomain_train.json"  
+input_file = "Qwen2-7B-Instruct/split_data/indomain_train.json"  
 prompt_file = "MMLU/dev.json"
-output_file = "traindata/rtune/rtune_indomain_train.json"  
+output_file = "Qwen2-7B-Instruct/traindata/rtune/rtune_indomain_train.json"  
 
 # 加载推理完成的数据
 with open(input_file, "r", encoding="utf-8") as f:
@@ -15,6 +15,7 @@ with open(prompt_file, "r", encoding="utf-8") as f:
 
 # 初始化输出数据结构
 formatted_data = {"type": "text_only", "instances": []}
+
 for subject, questions in inferred_data.items():
     # 获取当前 subject 的 few-shot 示例
     subject_prompt_data = prompt_data.get(subject, [])

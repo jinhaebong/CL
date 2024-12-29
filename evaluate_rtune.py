@@ -103,24 +103,26 @@ def checksure(input_text, model, tokenizer, device):
 
 def main():
     parser = ArgumentParser()
-    parser.add_argument('--model', type=str, default="output_models/Qwen2-7B-rtune/merge")
+    parser.add_argument('--model', type=str, default="Qwen2-7B-Instruct")
     parser.add_argument('--domain', type=str, default="id",choices=["id","ood"])
     args = parser.parse_args()
     
+    model_name = args.model
+    model_pth = f"output_models/{model_name}-rtune/merge"
 
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
     tokenizer = AutoTokenizer.from_pretrained(
-        args.model, use_fast=True,
+        model_pth, use_fast=True,
         unk_token="<unk>", bos_token="<s>", eos_token="</s>", add_bos_token=False
     )
-    model = AutoModelForCausalLM.from_pretrained(args.model).to(device)
+    model = AutoModelForCausalLM.from_pretrained(model_pth).to(device)
     
     STOP.append(tokenizer(".")['input_ids'][0])  # stop decoding when seeing '.'
     SURE.append(tokenizer("sure")['input_ids'][0])
     UNSURE.append(tokenizer("unsure")['input_ids'][0])
 
-    with open(f"data/split_data/{args.domain}_test.json", 'r') as f:
+    with open(f"data/{model_name}/split_data/{args.domain}_test.json", 'r') as f:
         data = json.load(f)
     
     with open(f"data/MMLU/dev.json", 'r') as f:
@@ -168,7 +170,7 @@ def main():
     
 
     # 保存评估结果
-    save_dir = "result/2.2.1/rtune"
+    save_dir = "result/2.2.1/{model_name}/rtune"
     save_file = f"result_{args.domain}.json"
     os.makedirs(save_dir, exist_ok=True)
     output_file = os.path.join(save_dir,save_file )

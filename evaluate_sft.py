@@ -12,17 +12,14 @@ from transformers import AutoTokenizer, AutoModelForCausalLM
 
 logging.getLogger("transformers").setLevel(logging.ERROR)
 
-STOP = []
-SURE = []
-UNSURE = []
-choices = ["A", "B", "C", "D","N"]
+choices = ["A", "B", "C", "D"]
 
 def gen_prompt(sample, subject, prompt_data):
     """
     sample: {
        "question": str,
        "choices": [str, str, str, str],
-       "answer": "A"/"B"/"C"/"D"/"N"
+       "answer": "A"/"B"/"C"/"D"
     }
     """
     # 1) 先处理“shots”的示例拼接
@@ -86,20 +83,22 @@ def inference(tokenizer, model, sample, subject, prompt_data, device):
 
 def main():
     parser = ArgumentParser()
-    parser.add_argument('--model', type=str, default="output_models/Qwen2-7B-sft/merge")
+    parser.add_argument('--model', type=str, default="Qwen2-7B-Instruct")
     parser.add_argument('--domain', type=str, default="id",choices=["id","ood"])
     args = parser.parse_args()
-    
+
+    model_name = args.model
+    model_pth = f"output_models/{model_name}-sft/merge"
 
     device = torch.device("cuda:1" if torch.cuda.is_available() else "cpu")
-
+    
     tokenizer = AutoTokenizer.from_pretrained(
-        args.model, use_fast=True,
+        model_pth, use_fast=True,
         unk_token="<unk>", bos_token="<s>", eos_token="</s>", add_bos_token=False
     )
-    model = AutoModelForCausalLM.from_pretrained(args.model).to(device)
+    model = AutoModelForCausalLM.from_pretrained(model_pth).to(device)
 
-    with open(f"data/split_data/{args.domain}_test.json", 'r') as f:
+    with open(f"data/{model_name}/split_data/{args.domain}_test.json", 'r') as f:
         data = json.load(f)
     
     with open(f"data/MMLU/dev.json", 'r') as f:
@@ -150,7 +149,7 @@ def main():
     
 
     # 保存评估结果
-    save_dir = "result/2.2.1/sft"
+    save_dir = f"result/2.2.1/{model_name}/sft"
     save_file = f"result_{args.domain}.json"
     os.makedirs(save_dir, exist_ok=True)
     output_file = os.path.join(save_dir,save_file )
@@ -164,3 +163,9 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+
+
+
+

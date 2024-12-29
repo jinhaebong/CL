@@ -2,3 +2,9 @@ output_models/
 data/data_csv/
 
 gpu.py
+result/2.2.1/cal.py
+result/2.2.1/cal1.py
+
+result/2.2.1/prompt/
+
+evaluater_prompt.py

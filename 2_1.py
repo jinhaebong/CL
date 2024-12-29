@@ -79,7 +79,7 @@ def inference(tokenizer, model, sample, subject, prompt_data, device):
 
 def main():
     parser = ArgumentParser()
-    parser.add_argument('--model', type=str, default="/home/LLMs/Qwen2-7B")
+    parser.add_argument('--model', type=str, default="/home/LLMs/Qwen2-7B-Instruct")
     args = parser.parse_args()
     
 
@@ -179,7 +179,7 @@ def main():
     print(f"Certainty (Known):    {certainty_count}")
 
     # 保存评估结果
-    save_dir = "data/2.1"
+    save_dir = "data/Qwen2-7B-Instruct/2.1"
     save_file = "evaluated_MMLU.json"
     os.makedirs(save_dir, exist_ok=True)
     output_file = os.path.join(save_dir,save_file )
