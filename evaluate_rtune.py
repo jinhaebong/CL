@@ -110,7 +110,7 @@ def main():
     model_name = args.model
     model_pth = f"output_models/{model_name}-rtune/merge"
 
-    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+    device = torch.device("cuda:1" if torch.cuda.is_available() else "cpu")
 
     tokenizer = AutoTokenizer.from_pretrained(
         model_pth, use_fast=True,
@@ -170,7 +170,7 @@ def main():
     
 
     # 保存评估结果
-    save_dir = "result/2.2.1/{model_name}/rtune"
+    save_dir = f"result/2.2.1/{model_name}/rtune"
     save_file = f"result_{args.domain}.json"
     os.makedirs(save_dir, exist_ok=True)
     output_file = os.path.join(save_dir,save_file )
