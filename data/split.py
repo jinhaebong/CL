@@ -2,8 +2,8 @@ import json
 import os
 
 # 输入文件路径
-input_file = "Qwen2-7B-Instruct/2.1/evaluated_MMLU.json"  
-output_dir = "Qwen2-7B-Instruct/split_data"  # 输出目录
+input_file = "Qwen2-7B/2.1/evaluated_MMLU.json"  
+output_dir = "Qwen2-7B/split_data"  # 输出目录
 
 # 创建输出目录
 os.makedirs(output_dir, exist_ok=True)

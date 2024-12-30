@@ -2,9 +2,9 @@ import json
 import os
 import random
 
-input_file = "Qwen2-7B-Instruct/split_data/indomain_train.json"  
+input_file = "Qwen2-7B/split_data/indomain_train.json"  
 prompt_file = "MMLU/dev.json"
-output_file = "Qwen2-7B-Instruct/traindata/rtune/rtune_indomain_train.json"  
+output_file = "Qwen2-7B/traindata/rtune/rtune_indomain_train.json"  
 
 # 加载推理完成的数据
 with open(input_file, "r", encoding="utf-8") as f:

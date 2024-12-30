@@ -83,14 +83,14 @@ def inference(tokenizer, model, sample, subject, prompt_data, device):
 
 def main():
     parser = ArgumentParser()
-    parser.add_argument('--model', type=str, default="Qwen2-7B-Instruct")
+    parser.add_argument('--model', type=str, default="Qwen2-7B")
     parser.add_argument('--domain', type=str, default="id",choices=["id","ood"])
     args = parser.parse_args()
 
     model_name = args.model
     model_pth = f"output_models/{model_name}-sft/merge"
 
-    device = torch.device("cuda:1" if torch.cuda.is_available() else "cpu")
+    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     
     tokenizer = AutoTokenizer.from_pretrained(
         model_pth, use_fast=True,
