@@ -22,7 +22,9 @@ pip install -e .
 ## 2.2.1
 使用2.1中生成的结果，分割数据集为 in-domain_train,in-domain_test,out-of-domain_test。
 
-各个方法均使用in-domain_train作为训练集微调，并在in-domain和out-of-domain的测试集进行评估。
+各个方法均使用in-domain_train作为训练集微调，具体是通过各自的trandata_method.py文件讲训练集转化为符合LMFlow的格式保存在traindata文件夹里。
+
+之后使用主目录下的评估文件在in-domain和out-of-domain的测试集进行评估。
 
 ## 2.2.2
 采用CRAFT方式解决模型过度拒绝的问题
