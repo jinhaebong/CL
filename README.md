@@ -67,3 +67,28 @@ python evaluate_sft.py --domain ood
 ## 2.2.2 避免知道的知识被错回复为“不知道”
 采用RAIT方式解决模型过度拒绝的问题
 
+通过下面方式生成rait训练数据集
+```sh
+cd src
+uncorrectness.py 
+
+cd ..
+cd data
+python cor_rait_dataset_selection.py 
+python traindata_cor_rait.py
+```
+与2.2.1相同，使用LMFlow微调
+```sh
+cd ..
+cd LMFlow
+./scripts/run_finetune_with_lora.sh    --model_name_or_path /path/to/Qwen2-7B   --dataset_path  ../data/Qwen2-7B/traindata/cor-rait/train/rait_indomain_train.json    --output_lora_path  ../output_models/Qwen2-7B-cor-rait/lora 
+
+bash ./scripts/run_merge_lora.sh --model_name_or_path /path/to/Qwen2-7B --lora_model_path ../output_models/Qwen2-7B-cor-rait/lora --output_model_path ../output_models/Qwen2-7B-cor-rait/merge --device cpu
+
+```
+随后进行测试
+```sh
+cd ..
+cd src
+python evaluate_cor_rait.py
+```

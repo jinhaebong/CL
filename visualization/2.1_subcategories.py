@@ -5,13 +5,17 @@ from collections import defaultdict
 import os
 
 
-# with open("../data/Qwen2-7B/2.1/evaluated_MMLU.json", "r", encoding="utf-8") as f:
-with open("../data/Qwen2-7B-Instruct/2.1/evaluated_MMLU.json", "r", encoding="utf-8") as f:
+with open("../result/2.1/Qwen2-7B/evaluated_MMLU.json", "r", encoding="utf-8") as f:
+# with open("../result/2.1/Qwen2-7B-Instruct/evaluated_MMLU.json", "r", encoding="utf-8") as f:
     data = json.load(f)
 
-result = "Qwen2-7B-Instruct"
-output_dir = result  
-output_file = f"{output_dir}/{result}.png"  
+result = "Qwen2-7B"
+output_dir = "Qwen2-7B" 
+
+# result = "Qwen2-7B-Instruct"
+# output_dir = "Qwen2-7B-Instruct" 
+
+output_file = f"{output_dir}/{result}_subcategories.png"  
 os.makedirs(output_dir, exist_ok=True)
 
 
