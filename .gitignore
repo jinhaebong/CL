@@ -8,3 +8,7 @@ result/2.2.1/cal1.py
 result/2.2.1/prompt/
 
 evaluate_prompt.py
+nohup.out
+/2.2.2/
+/eval.sh
+csv_to_json.py
