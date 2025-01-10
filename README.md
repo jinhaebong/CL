@@ -11,20 +11,56 @@ conda install mpi4py -y
 pip install -e .
 ```
 ## 目录结构
-* data目录下存放了训练和测试用的数据集，2.1中的结果，还有微调所需要的数据。目录中代码文件是用于分割和改变格式用的。
-* result目录下存放了2.2的结果
-* 主目录下的文件是用于推理的文件
+* data目录下存放了数据和格式转换用的文件(用于LMflow进行微调)
+* result目录下存放了2.1，2.2.1，2.2.2的结果和评估结果用的文件
+* src目录下存放了各个方法测试所用的代码
 
 ## 2.1
 选择Qwen2-7B和Qwen2-7B-Instruct作为本实验的模型进行实验。
 分别执行 2_1.py 可以得到两个模型分别在MMLU数据集中的表现。
+```sh
+cd src
+python 2_1.py
+```
+
+结果存放在result/2.1
 
 ## 2.2.1
-使用2.1中生成的结果，分割数据集为 in-domain_train,in-domain_test,out-of-domain_test。
+使用2.1中生成的结果，分割数据集为 in-domain_train,in-domain_test,out-of-domain_test存放在split_data文件夹下。
+```sh
+cd data
+python split.py
+```
 
 各个方法均使用in-domain_train作为训练集微调，具体是通过各自的trandata_method.py文件讲训练集转化为符合LMFlow的格式保存在traindata文件夹里。
 
-之后使用主目录下的评估文件在in-domain和out-of-domain的测试集进行评估。
+```sh
+python traindata_vanilla.py
+python traindata_rtune.py
+python traindata_sft.py
+```
+
+后续使用LMflow进行微调
+```sh
+cd ..
+cd LMFlow
+./scripts/run_finetune_with_lora.sh    --model_name_or_path /path/to/Qwen2-7B   --dataset_path  ../data/Qwen2-7B/traindata/sft    --output_lora_path  ../output_models/Qwen2-7B-sft/lora 
+
+bash ./scripts/run_merge_lora.sh --model_name_or_path /path/to/Qwen2-7B --lora_model_path ../output_models/Qwen2-7B-sft/lora --output_model_path ../output_models/Qwen2-7B-sft/merge --device cpu
+```
+
+之后使用src目录下的评估文件在in-domain和out-of-domain的测试集进行测试。
+```sh
+cd ..
+cd src
+python evaluate_vanilla.py
+python evaluate_vanilla.py --domain ood
+python evaluate_rtune.py
+python evaluate_rtune.py --domain ood
+python evaluate_sft.py
+python evaluate_sft.py --domain ood
+```
 
 ## 2.2.2
-采用CRAFT方式解决模型过度拒绝的问题
+采用RAIT方式解决模型过度拒绝的问题
+

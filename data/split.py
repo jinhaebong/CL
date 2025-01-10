@@ -2,7 +2,7 @@ import json
 import os
 
 # 输入文件路径
-input_file = "Qwen2-7B/2.1/evaluated_MMLU.json"  
+input_file = "../result/2.1/Qwen2-7B/evaluated_MMLU.json"  
 output_dir = "Qwen2-7B/split_data"  # 输出目录
 
 # 创建输出目录
@@ -45,8 +45,8 @@ indomain_train_data, indomain_test_data = split_data_by_subject(indomain_data)
 
 # 保存数据
 indomain_train_file = os.path.join(output_dir, "indomain_train.json")
-indomain_test_file = os.path.join(output_dir, "indomain_test.json")
-outofdomain_file = os.path.join(output_dir, "outofdomain.json")
+indomain_test_file = os.path.join(output_dir, "id_test.json")
+outofdomain_file = os.path.join(output_dir, "ood_test.json")
 
 with open(indomain_train_file, "w", encoding="utf-8") as f:
     json.dump(indomain_train_data, f, ensure_ascii=False, indent=4)
