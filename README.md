@@ -70,7 +70,7 @@ python evaluate_sft.py --domain ood
 通过下面方式生成rait训练数据集
 ```sh
 cd src
-uncorrectness.py 
+get_correctness.py 
 
 cd ..
 cd data
