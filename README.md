@@ -69,6 +69,9 @@ python evaluate_sft.py --domain ood
 
 通过下面方式生成rait训练数据集
 ```sh
+cd data
+split_with_correctness_and_entropy.py
+cd ..
 cd src
 get_correctness.py 
 
