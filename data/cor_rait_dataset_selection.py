@@ -3,7 +3,7 @@ import os
 from tqdm.auto import tqdm
 
 def main():
-    base_results = "Qwen2-7B/split_data/indomain_train.json"  
+    base_results = "/Qwen2-7B/split_data/with_correctness_and_entropy/indomain_train.json"  
     finetuned_results = "Qwen2-7B/rait_1_finetune_results/indomain_train.json"
     # 创建输出目录
 
