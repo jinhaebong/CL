@@ -43,7 +43,7 @@ python traindata_rtune.py
 python traindata_sft.py
 ```
 
-后续使用LMflow进行微调
+后续使用LMflow进行微调，按方法更改训练集路径和模型路径。
 ```sh
 cd ..
 cd LMFlow
