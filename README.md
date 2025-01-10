@@ -15,7 +15,7 @@ pip install -e .
 * result目录下存放了2.1，2.2.1，2.2.2的结果和评估结果用的文件
 * src目录下存放了各个方法测试所用的代码
 
-## 2.1
+# 2.1 探查⼤模型的“知识边界”
 选择Qwen2-7B和Qwen2-7B-Instruct作为本实验的模型进行实验。
 分别执行 2_1.py 可以得到两个模型分别在MMLU数据集中的表现。
 ```sh
@@ -25,7 +25,10 @@ python 2_1.py
 
 结果存放在result/2.1
 
-## 2.2.1
+# 2.2 提升和应⽤⼤模型⾃我知识边界的探索能⼒
+2.2.1和2.2.2实验我们选择使用Qwen2-7B进行。
+
+## 2.2.1 让⼤模型在不知道的时候回答“不知道”
 使用2.1中生成的结果，分割数据集为 in-domain_train,in-domain_test,out-of-domain_test存放在split_data文件夹下。
 ```sh
 cd data
@@ -61,6 +64,6 @@ python evaluate_sft.py
 python evaluate_sft.py --domain ood
 ```
 
-## 2.2.2
+## 2.2.2 避免知道的知识被错回复为“不知道”
 采用RAIT方式解决模型过度拒绝的问题
 
